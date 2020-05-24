@@ -35,8 +35,15 @@ class SecondViewController: ViewController {
         imageURL = URL (string: "https://upload.wikimedia.org/wikipedia/commons/9/96/Apple_III%2B.jpg")
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        guard let url = imageURL, let imageData = try? Data(contentsOf: url) else { return }
-        self.image = UIImage(data: imageData)
+        
+        let queue = DispatchQueue.global(qos: .utility)
+        queue.async {
+            guard let url = self.imageURL, let imageData = try? Data(contentsOf: url) else { return }
+            DispatchQueue.main.async {
+                
+                self.image = UIImage(data: imageData)
+            }
+        }
     }
     
 }
